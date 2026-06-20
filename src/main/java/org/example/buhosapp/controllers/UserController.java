@@ -7,10 +7,7 @@ import org.example.buhosapp.domain.dtos.response.GeneralResponse;
 import org.example.buhosapp.services.impl.UserServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.time.LocalDateTime;
@@ -22,11 +19,14 @@ public class UserController {
     private final UserServiceImpl userService;
 
     @PostMapping("/create")
-    public ResponseEntity<GeneralResponse> createUser(@RequestBody @Valid CreateUserRequest createUserRequest) {
+    public ResponseEntity<GeneralResponse> createUser(
+            @RequestBody @Valid CreateUserRequest createUserRequest,
+            @RequestParam String roleName
+    ) {
         return buildResponse(
                 "User created successfully",
                 HttpStatus.CREATED,
-                userService.createUser(createUserRequest)
+                userService.createUser(createUserRequest, roleName)
         );
     }
 
