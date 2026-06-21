@@ -8,6 +8,7 @@ import org.example.buhosapp.domain.dtos.response.user.UserResponse;
 import org.example.buhosapp.domain.entities.Role;
 import org.example.buhosapp.domain.entities.User;
 import org.example.buhosapp.repositories.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -36,28 +37,38 @@ public class UserServiceImplTest {
     @InjectMocks
     private UserServiceImpl userService;
 
-    @Test
-    void createUser_shouldSaveUserWithCorrectRole() {
-        UUID roleId = UUID.randomUUID();
+    private UUID userId;
+    private UUID roleId;
+    private CreateUserRequest request;
+    private RoleResponse roleResponse;
+    private Role roleEntity;
+    private User userEntity;
+    private UserResponse userResponse;
 
-        CreateUserRequest request = CreateUserRequest.builder()
+    @BeforeEach
+    void setUp() {
+        userId = UUID.randomUUID();
+        roleId = UUID.randomUUID();
+
+        request = CreateUserRequest.builder()
                 .username("paco")
                 .email("paco@test.com")
                 .card("00000000")
                 .password("123456abc")
                 .build();
 
-        RoleResponse roleResponse = RoleResponse.builder()
+        roleResponse = RoleResponse.builder()
                 .id(roleId)
                 .build();
 
-        Role roleEntity = Role.builder()
+        roleEntity = Role.builder()
                 .id(roleId)
                 .name("student")
                 .description("Student role, can only see reservations that have been made")
                 .build();
 
-        User userEntity = User.builder()
+        userEntity = User.builder()
+                .id(userId)
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .card(request.getCard())
@@ -65,12 +76,15 @@ public class UserServiceImplTest {
                 .role(roleEntity)
                 .build();
 
-        UserResponse userResponse = UserResponse.builder()
+        userResponse = UserResponse.builder()
                 .username(userEntity.getUsername())
                 .email(userEntity.getEmail())
                 .card(userEntity.getCard())
                 .build();
+    }
 
+    @Test
+    void createUser_shouldSaveUserWithCorrectRole() {
         when(roleService.getRoleByName(roleEntity.getName())).thenReturn(roleResponse);
         when(roleMapper.toEntity(roleResponse)).thenReturn(roleEntity);
         when(userMapper.toEntityCreate(request, roleEntity)).thenReturn(userEntity);
@@ -78,6 +92,6 @@ public class UserServiceImplTest {
         when(userMapper.toDto(userEntity)).thenReturn(userResponse);
 
         var result = userService.createUser(request, roleEntity.getName());
-        assertThat(result.getUsername()).isEqualTo(userResponse.getUsername());
+        assertThat(result).isEqualTo(userResponse);
     }
 }
