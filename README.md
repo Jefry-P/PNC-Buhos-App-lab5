@@ -35,3 +35,88 @@ src/main/java/lat/buhoseats/api/
 ├── repositories/
 └── services/
 ├      ├── Impl/
+```
+
+## 🚀 Ejecución y Despliegue Local
+
+### 1. Requisitos Previos
+
+Tener instalado en tu sistema:
+- **Docker Desktop** (v20.10+ recomendado)
+- **Docker Compose**
+- **Git**
+
+### 2. Configuración del Entorno (`.env`)
+
+El proyecto utiliza variables de entorno. Duplica el archivo de ejemplo y configura tus valores locales:
+
+```bash
+cp .env.example .env
+
+DATABASE_NAME=buhos_db
+DATABASE_USERNAME=buhos_user
+DATABASE_PASSWORD=securePassword
+```
+## 🚀 Gestión del Entorno con Docker Compose
+
+Este proyecto utiliza Docker Compose para orquestar la API y la base de datos PostgreSQL de manera automatizada utilizando las configuraciones definidas en tu archivo `.env`.
+
+### 1. Levantar la Infraestructura
+
+Para construir las imágenes e iniciar todos los servicios (Base de Datos + API) en segundo plano (*detached mode*), ejecuta el siguiente comando en la raíz del proyecto:
+
+```bash
+docker compose up --build -d
+```
+
+### Control de Contenedores
+Construye las imágenes desde cero e inicia todos los servicios en segundo plano.
+```bash
+docker compose up --build -d
+```
+
+Detiene y elimina los contenedores activos, pero mantiene intactos los datos de la base de datos.
+```bash
+docker compose down
+```
+
+Detiene todo y borra por completo los volúmenes, eliminando toda la información de la base de datos.
+```bash
+docker compose down -v
+```
+
+--
+
+### Monitoreo y Diagnóstico
+Muestra el estado actual de los contenedores y los puertos en los que están escuchando.
+```bash
+docker compose ps
+```
+
+Muestra las salidas y logs de todos los contenedores al mismo tiempo en tiempo real.
+```bash
+docker compose logs -f
+```
+
+Muestra únicamente los logs de la API de Spring Boot.
+```bash
+docker compose logs -f app
+```
+
+Muestra únicamente los logs del motor de base de datos PostgreSQL en tiempo real.
+```bash
+docker compose logs -f db
+```
+
+---
+
+### Mantenimiento
+Muestra el consumo de CPU, memoria y red de cada contenedor en vivo.
+```bash
+docker stats
+```
+
+Reinicia de forma rápida únicamente el contenedor de la API sin afectar a la base de datos.
+```bash
+docker compose restart app
+```
