@@ -14,8 +14,6 @@ public class RoleMapper {
                 .description(createRoleRequest.getDescription())
                 .build();
     }
-
-    
     public RoleResponse toDto(Role role) {
         return RoleResponse.builder()
                 .id(role.getId())
