@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class RoleController {
     private final RoleServiceImpl roleService;
-
     @PostMapping("/create")
     public ResponseEntity<GeneralResponse> createRole(@RequestBody @Valid CreateRoleRequest createRoleRequest) {
         roleService.createRole(createRoleRequest);
