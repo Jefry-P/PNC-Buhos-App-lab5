@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class RoleMapper {
+    
     public Role toEntityCreate(CreateRoleRequest createRoleRequest) {
         return Role.builder()
                 .name(createRoleRequest.getName())
